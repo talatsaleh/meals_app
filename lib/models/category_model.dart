@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../Screens/filter_screen.dart';
 import '../data/dummy_data.dart';
@@ -15,6 +14,7 @@ class Category {
   final String id;
   final String title;
   final Color color;
+
 
   List<Meal> getMealsById(Map<Filter, bool> filters) {
     List<Meal>? meals =
