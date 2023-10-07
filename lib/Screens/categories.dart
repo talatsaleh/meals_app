@@ -8,13 +8,10 @@ import 'filter_screen.dart';
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen(
       {super.key,
-      required this.toggleFav,
       required this.favMeals,
-      required this.selectedFilter});
+      });
 
-  final void Function(Meal meal) toggleFav;
   final List<Meal> favMeals;
-  final Map<Filter, bool> selectedFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +27,6 @@ class CategoriesScreen extends StatelessWidget {
         for (final category in availableCategories)
           CategoryGridItem(
             category: category,
-            toggleFav: toggleFav,
-            favMeals: favMeals,
-            selectedFilter: selectedFilter,
           ),
       ],
     );

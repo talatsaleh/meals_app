@@ -1,42 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meals_app/providers/favorite_provider.dart';
 
 import '../models/meals_model.dart';
 
-class MealsDetailsScreen extends StatefulWidget {
+class MealsDetailsScreen extends ConsumerWidget {
   const MealsDetailsScreen({
     super.key,
     required this.meal,
-    required this.toggleFav,
-    required this.favMeals,
   });
 
-  final List<Meal> favMeals;
   final Meal meal;
-  final void Function(Meal meal) toggleFav;
 
   @override
-  State<MealsDetailsScreen> createState() => _MealsDetailsScreenState();
-}
-
-class _MealsDetailsScreenState extends State<MealsDetailsScreen> {
-  @override
-  Widget build(BuildContext context) {
-    bool isFav = widget.favMeals.contains(widget.meal);
-    final kTitle = Theme.of(context).textTheme.titleLarge!.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-        );
-    final kBody = Theme.of(context).textTheme.bodyLarge!.copyWith(
-          color: Theme.of(context).colorScheme.onBackground,
-        );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favMeals = ref.watch(favoriteMealsProvider);
+    bool isFav = favMeals.contains(meal);
+    final kTitle = Theme
+        .of(context)
+        .textTheme
+        .titleLarge!
+        .copyWith(
+      color: Theme
+          .of(context)
+          .colorScheme
+          .primary,
+    );
+    final kBody = Theme
+        .of(context)
+        .textTheme
+        .bodyLarge!
+        .copyWith(
+      color: Theme
+          .of(context)
+          .colorScheme
+          .onBackground,
+    );
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.meal.title),
+        title: Text(meal.title),
         actions: [
           IconButton(
             onPressed: () {
-              setState(() {
-                widget.toggleFav(widget.meal);
-              });
+              ref
+                  .read(favoriteMealsProvider.notifier)
+                  .toggleMealFavoriteStatus(meal);
             },
             icon: Icon(
               isFav == false ? Icons.star_outline : Icons.star,
@@ -48,7 +56,7 @@ class _MealsDetailsScreenState extends State<MealsDetailsScreen> {
         child: Column(
           children: [
             Image.network(
-              widget.meal.imageUrl,
+              meal.imageUrl,
               width: double.infinity,
               fit: BoxFit.cover,
             ),
@@ -62,7 +70,7 @@ class _MealsDetailsScreenState extends State<MealsDetailsScreen> {
             const SizedBox(
               height: 12,
             ),
-            for (final ingredient in widget.meal.ingredients)
+            for (final ingredient in meal.ingredients)
               Text(
                 ingredient,
                 style: kBody,
@@ -74,7 +82,7 @@ class _MealsDetailsScreenState extends State<MealsDetailsScreen> {
               'Steps',
               style: kTitle,
             ),
-            for (final step in widget.meal.steps)
+            for (final step in meal.steps)
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
                 child: Text(

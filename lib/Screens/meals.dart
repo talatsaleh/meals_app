@@ -7,15 +7,11 @@ class MealsScreen extends StatelessWidget {
   const MealsScreen({
     super.key,
     this.title,
-    this.meals,
-    required this.toggleFav,
-    required this.favMeals,
+    required this.meals,
   });
 
-  final void Function(Meal meal) toggleFav;
   final String? title;
-  final List<Meal>? meals;
-  final List<Meal> favMeals;
+  final List<Meal> meals;
 
   @override
   Widget build(BuildContext context) {
@@ -33,53 +29,31 @@ class MealsScreen extends StatelessWidget {
             .onBackground),
       );
     }
-    if (meals == null) {
-      print('not meals');
-      if (favMeals.isEmpty) {
-        print('is empty');
-        content = Center(
-            child: stringWidget(
-                'There is no Favorites Meals to see here.. try to Add one')
-        );
-      } else {
-        print('not empty');
-        content = ListView.builder(
-            itemBuilder: (ctx, index) {
-              return MealGridItem(
-                meal: favMeals[index],
-                toggleFav: toggleFav,
-                favMeal: favMeals,
-              );
-            },
-            itemCount: favMeals!.length);
-      }
-    } else {
-      if (meals!.isEmpty) {
-        content = const Center(
-          child: Text('Ops... there is no meals to see.. try add one'),
-        );
-      } else {
-        content = ListView.builder(
-            itemBuilder: (ctx, index) {
-              return MealGridItem(
-                meal: meals![index],
-                toggleFav: toggleFav,
-                favMeal: favMeals,
-              );
-            },
-            itemCount: meals!.length);
-      }
-    }
 
-    if (title == null) {
+    if (meals.isEmpty) {
+      print('is empty');
+      content = Center(
+          child: stringWidget(title == null
+              ? 'there is no favorite try add one'
+              : 'there is no meals here'));
+    } else {
+      content = ListView.builder(
+          itemBuilder: (ctx, index) {
+            return MealGridItem(
+              meal: meals[index],
+            );
+          },
+          itemCount: meals.length);
+    }
+    if (title != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(title!),
+        ),
+        body: content,
+      );
+    } else {
       return content;
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title!),
-      ),
-      body: content,
-
-    );
   }
 }

@@ -9,13 +9,9 @@ class MealGridItem extends StatelessWidget {
   const MealGridItem({
     super.key,
     required this.meal,
-    required this.toggleFav,
-    required this.favMeal,
   });
 
-  final void Function(Meal meal) toggleFav;
   final Meal meal;
-  final List<Meal> favMeal;
 
   String getFirstUpperCase(String name) {
     return name[0].toUpperCase() + name.substring(1);
@@ -32,8 +28,6 @@ class MealGridItem extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return MealsDetailsScreen(
               meal: meal,
-              toggleFav: toggleFav,
-              favMeals: favMeal,
             );
           }));
         },

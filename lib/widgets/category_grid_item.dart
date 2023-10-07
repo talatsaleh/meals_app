@@ -1,33 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/Screens/meals.dart';
-import 'package:meals_app/models/meals_model.dart';
+import 'package:meals_app/providers/filter_provider.dart';
 
-import '../Screens/filter_screen.dart';
 import '../models/category_model.dart';
 
-class CategoryGridItem extends StatelessWidget {
+class CategoryGridItem extends ConsumerWidget {
   const CategoryGridItem({
     required this.category,
-    required this.toggleFav,
-    required this.favMeals,
-    required this.selectedFilter,
     super.key,
   });
-  final Map<Filter,bool> selectedFilter;
-  final List<Meal> favMeals;
-  final void Function(Meal meal) toggleFav;
+
   final Category category;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedFilter = ref.watch(filterProvider);
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return MealsScreen(
             title: category.title,
             meals: category.getMealsById(selectedFilter),
-            toggleFav: toggleFav,
-            favMeals: favMeals
           );
         }));
       },
